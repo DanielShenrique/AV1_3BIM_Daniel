@@ -10,6 +10,11 @@ namespace AV3_3BIM_Daniel
     {
         private static Activity c;
 
+        private AlarmManager manager;
+
+        private Intent i;
+        private PendingIntent pi;
+
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
@@ -18,6 +23,11 @@ namespace AV3_3BIM_Daniel
             SetContentView(Resource.Layout.Main);
 
             c = this;
+
+            i = new Intent(this, typeof(AlarmBroadcast));
+            pi = PendingIntent.GetBroadcast(this, 0, i, 0); ;
+
+            manager = (AlarmManager)GetSystemService(AlarmService);
 
             Button buttonDelayAlarm = FindViewById<Button>(Resource.Id.buttonDelayAlarm);
 
@@ -28,35 +38,27 @@ namespace AV3_3BIM_Daniel
 
         private void OnButtonDelayAlarmClicked(object sender, System.EventArgs e)
         {
-        
-        AlarmManager manager = (AlarmManager)GetSystemService(Android.Content.Context.AlarmService);
-        Intent i2;
-        PendingIntent pi2;
+            Toast toast = Toast.MakeText(c, "+10 seconds", ToastLength.Short);
 
-        i2 = new Intent(this, typeof(AlarmBroadcast));
-        pi2 = PendingIntent.GetBroadcast(this, 0, i2, 0);
-
-        manager.SetExact(AlarmType.ElapsedRealtime, SystemClock.ElapsedRealtime() + 10000, pi2);
-        
-
-
+            manager.SetExact(AlarmType.ElapsedRealtime, SystemClock.ElapsedRealtime() + 10000, pi);
+            toast.Show();
+            
         }
 
         private void SetAlarm()
         {
-            AlarmManager manager = (AlarmManager)GetSystemService(Android.Content.Context.AlarmService);
-            Intent i;
-            PendingIntent pi;
-
-            i = new Intent(this, typeof(AlarmBroadcast));
-            pi = PendingIntent.GetBroadcast(this, 0, i, 0);
+            Toast toast = Toast.MakeText(c, "15 seconds", ToastLength.Short);
 
             manager.SetExact(AlarmType.ElapsedRealtime, SystemClock.ElapsedRealtime() + 15000, pi);
+            toast.Show();
         }
 
         public static void CloseThis()
         {
-            c.Finish();
+            if(c != null)
+            {
+                c.Finish();
+            }
         }
     }
 }
